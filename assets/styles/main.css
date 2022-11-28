@@ -8,6 +8,10 @@ body {
 
 #board {
   display: grid;
-
   gap: 0;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-around;
 }
