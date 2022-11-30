@@ -7,35 +7,28 @@ function createBoard(width, height) {
     for (let boardRow = 0; boardRow < width; boardRow++) {
       row.push(0);
     }
-    //console.log(row);
     board.push(row);
   }
   return board;
 }
 
 function other_player(player) {
-  if (player == 1) {
-    return 2;
-  }
+  if (player == 1) return 2;
   return 1;
 }
 
 function insertpiece(board, x, player) {
-  //console.log("b", board, x, player);
-  if (!(x > 0 && x <= width)) {
-    return false;
-  }
+  if (!(x > 0 && x <= width)) return false;
 
-  for (let y = 0; y < board[x - 1].length; y++) {
+  for (let y = 0; y < board.length; y++) {
     if (board[y][x - 1] != 0) {
-      if (y == 0) {
-        return false;
-      }
+      console.log(y);
+      if (y == 0) return false;
       board[y - 1][x - 1] = player;
-      return board;
-    } else if (y == board[x - 1].length - 1) {
+      return y - 1;
+    } else if (y == board.length - 1) {
       board[y][x - 1] = player;
-      return board;
+      return y;
     }
   }
 }
@@ -77,7 +70,7 @@ function buttons(board) {
   let numCol = "1fr ".repeat(width);
   htmlButtons.style.gridTemplateColumns = numCol;
   let insertion = "";
-  for (let boardCol = 0; boardCol < board.length; boardCol++) {
+  for (let boardCol = 0; boardCol < board[0].length; boardCol++) {
     insertion +=
       "<button style='white-space:pre-line; border-radius: 1rem;'>|\n|\nV</button>";
   }
@@ -85,57 +78,88 @@ function buttons(board) {
 
   //buttons logic
   let buttons = Array.from(htmlButtons.children);
-  for (let i = 0; i < buttons.length; i++) {
-    buttons[i].onclick = function () {
-      if (!insertpiece(board, i + 1, player)) return;
+  for (let col = 0; col < buttons.length; col++) {
+    buttons[col].onclick = function () {
+      row = insertpiece(board, col + 1, player);
+      if (row === false) return;
       displayBoard(board);
-      console.log(checkRow(board));
-      console.log(checkCol(board));
+      console.log(checkRow(board, row));
+      console.log(checkCol(board, col));
+      console.log(checkDiag(board, row, col, 0));
+      console.log(checkDiag(board, row, col, 1));
+
       player = other_player(player);
     };
   }
 }
 
-function checkRow(board) {
-  for (row of board) {
-    playerRow = 0;
-    for (let i = 0; i < board.length; i++) {
-      if (row[i] === player && row[i + 1] === player) {
-        playerRow++;
-      } else if (row[i] !== player) playerRow = 0;
-      if (playerRow >= 3) {
-        console.log("WIN");
-        return true;
-      }
-    }
+function checkRow(board, row) {
+  playerRow = 0;
+  for (let col = 0; col < board.length; col++) {
+    if (board[row][col] === player && board[row][col + 1] === player)
+      playerRow++;
+    else if (board[row][col] !== player) playerRow = 0;
+
+    if (playerRow >= 3) return true;
   }
   return false;
 }
 
-function checkCol(board) {
-  for (let j = 0; j < board[board.length - 1].length; j++) {
-    playerCol = 0;
-    for (let i = 0; i < board.length - 1; i++) {
-      if (board[i][j] === player && board[i + 1][j] === player) {
-        playerCol++;
-      } else if (board[i][j] !== player) {
-        playerCol = 0;
-      }
-      if (playerCol >= 3) {
-        console.log("WIN");
-        return true;
-      }
-    }
+function checkCol(board, col) {
+  playerCol = 0;
+  for (let row = 0; row < board.length - 1; row++) {
+    if (board[row][col] === player && board[row + 1][col] === player)
+      playerCol++;
+    else if (board[row][col] !== player) playerCol = 0;
+    if (playerCol >= 3) return true;
   }
   return false;
 }
 
-player = 2;
-width = 7;
-height = 7;
-board = createBoard(width, height);
-//insertpiece(board, 1, 1);
-console.log(board);
+function checkDiag(board, row, col, direction) {
+  playerDiag = 0;
+  switch (direction) {
+    case 0:
+      while (col > 0 && row < board.length - 1) {
+        col--;
+        row++;
+      }
 
-buttons(board);
-displayBoard(board);
+      while (col <= board.length && row > 0) {
+        if (board[row][col] === player && board[row - 1][col + 1] === player)
+          playerDiag++;
+        if (playerDiag >= 3) return true;
+
+        col++;
+        row--;
+      }
+
+    case 1:
+      console.log("before ", row, col);
+      while (col < board.length && row < board.length - 1) {
+        col++;
+        row++;
+      }
+
+      while (row > 0 && row > 0) {
+        if (board[row][col] === player && board[row - 1][col - 1] === player)
+          playerDiag++;
+        if (playerDiag >= 3) return true;
+
+        col--;
+        row--;
+      }
+  }
+  return false;
+}
+
+function connectFour() {
+  player = 1;
+  width = 7;
+  height = 6;
+  board = createBoard(width, height);
+  buttons(board);
+  displayBoard(board);
+}
+
+connectFour();
