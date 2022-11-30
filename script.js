@@ -89,7 +89,7 @@ function buttons(board) {
     buttons[i].onclick = function () {
       if (!insertpiece(board, i + 1, player)) return;
       displayBoard(board);
-      //console.log(checkRow(board));
+      console.log(checkRow(board));
       console.log(checkCol(board));
       player = other_player(player);
     };
@@ -101,16 +101,14 @@ function checkRow(board) {
     playerRow = 0;
     for (let i = 0; i < board.length; i++) {
       if (row[i] === player && row[i + 1] === player) {
-        //console.log(col, row[i + 1], player);
         playerRow++;
-      }
+      } else if (row[i] !== player) playerRow = 0;
       if (playerRow >= 3) {
         console.log("WIN");
         return true;
       }
     }
   }
-  console.log("notwin", player);
   return false;
 }
 
@@ -119,17 +117,16 @@ function checkCol(board) {
     playerCol = 0;
     for (let i = 0; i < board.length - 1; i++) {
       if (board[i][j] === player && board[i + 1][j] === player) {
-        console.log("INSIDE");
         playerCol++;
+      } else if (board[i][j] !== player) {
+        playerCol = 0;
       }
-      //console.log("test", 1 == 1, playerCol >= 3);
       if (playerCol >= 3) {
         console.log("WIN");
         return true;
       }
     }
   }
-  console.log("notwin", playerCol);
   return false;
 }
 
