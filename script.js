@@ -80,15 +80,7 @@ function buttons(board) {
   let buttons = Array.from(htmlButtons.children);
   for (let col = 0; col < buttons.length; col++) {
     buttons[col].onclick = function () {
-      row = insertpiece(board, col + 1, player);
-      if (row === false) return;
-      displayBoard(board);
-      console.log(checkRow(board, row));
-      console.log(checkCol(board, col));
-      console.log(checkDiag(board, row, col, 0));
-      console.log(checkDiag(board, row, col, 1));
-
-      player = other_player(player);
+      play(board, col);
     };
   }
 }
@@ -135,7 +127,6 @@ function checkDiag(board, row, col, direction) {
       }
 
     case 1:
-      console.log("before ", row, col);
       while (col < board.length && row < board.length - 1) {
         col++;
         row++;
@@ -153,13 +144,53 @@ function checkDiag(board, row, col, direction) {
   return false;
 }
 
-function connectFour() {
+function checkWin(board, row, col) {
+  if (
+    checkRow(board, row) ||
+    checkCol(board, col) ||
+    checkDiag(board, row, col, 0) ||
+    checkDiag(board, row, col, 1)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function stopPlay() {
+  const htmlButtons = document.getElementById("buttons");
+  let buttons = Array.from(htmlButtons.children);
+  for (let col = 0; col < buttons.length; col++) buttons[col].disabled = true;
+}
+
+function getHeight() {
+  height = parseInt(document.getElementById("height").value);
+  if (typeof height !== "int") height = 6;
+  return height;
+}
+function getWidth() {
+  width = parseInt(document.getElementById("width").value);
+  if (typeof width !== "int") width = 7;
+  return width;
+}
+
+function initialize() {
   player = 1;
-  width = 7;
-  height = 6;
+  width = getWidth();
+  height = getHeight();
   board = createBoard(width, height);
   buttons(board);
+  gameOver = false;
   displayBoard(board);
 }
 
-connectFour();
+function play(board, col) {
+  row = insertpiece(board, col + 1, player);
+  if (row === false) return;
+
+  if (checkWin(board, row, col)) gameOver = true;
+  if (gameOver) stopPlay();
+  displayBoard(board);
+  player = other_player(player);
+}
+
+initialize();
