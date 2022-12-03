@@ -1,14 +1,14 @@
 function getHeight() {
   height = parseInt(document.getElementById("height").value);
   if (height < 4) height = 4;
-  if (typeof height !== "number") height = 6;
+  if (isNaN(height)) height = 6;
   return height;
 }
 
 function getWidth() {
   width = parseInt(document.getElementById("width").value);
   if (width < 4) width = 4;
-  if (typeof width !== "number") width = 7;
+  if (isNaN(width)) width = 7;
   return width;
 }
 
@@ -49,9 +49,10 @@ function insertpiece(board, x, player) {
 function checkRow(board, row) {
   playerRow = 0;
   for (let col = 0; col < board.length; col++) {
-    if (board[row][col] === player && board[row][col + 1] === player)
+    if (board[row][col] === player && board[row][col + 1] === player) {
       playerRow++;
-    else if (board[row][col] !== player) playerRow = 0;
+      console.log(playerRow);
+    } else if (board[row][col] !== player) playerRow = 0;
 
     if (playerRow >= 3) return true;
   }
@@ -150,7 +151,7 @@ function clickBoard(board) {
   let cells = Array.from(htmlBoard.children);
   for (let i = 0; i < cells.length; i++) {
     cells[i].onclick = function () {
-      play(board, i % 4);
+      play(board, i % width);
     };
   }
 }
@@ -162,8 +163,7 @@ function buttons(board) {
   htmlButtons.style.gridTemplateColumns = numCol;
   let insertion = "";
   for (let boardCol = 0; boardCol < board[0].length; boardCol++) {
-    insertion +=
-      "<img src='./assets/arrow_downward_FILL0_wght400_GRAD0_opsz48.svg'>";
+    insertion += "<img src='./assets/arrow_downward.svg'>";
   }
   htmlButtons.innerHTML = insertion;
 
@@ -172,12 +172,11 @@ function buttons(board) {
   for (let col = 0; col < buttons.length; col++) {
     buttons[col].onclick = function () {
       play(board, col);
-      console.log("butt", col);
     };
   }
 }
 
-function stopPlay() {
+function stopPlay(player) {
   displayBoard(board, false);
 
   const BUTTONS = Array.from(document.getElementById("buttons").children);
@@ -189,6 +188,12 @@ function stopPlay() {
 
   const CELLS = Array.from(document.getElementById("board").children);
   for (let cell of CELLS) cell.onclick = "";
+  console.log(player);
+  const htmlInfo = document.getElementById("infos");
+  const paragraph = document.createElement("h2");
+  let node = document.createTextNode("Player " + player + " won");
+  paragraph.appendChild(node);
+  htmlInfo.appendChild(paragraph);
 }
 
 function initialize() {
@@ -206,7 +211,7 @@ function play(board, col) {
   if (row === false) return;
 
   if (checkWin(board, row, col)) gameOver = true;
-  if (gameOver) stopPlay();
+  if (gameOver) stopPlay(player);
   else displayBoard(board, true);
   player = other_player(player);
 }

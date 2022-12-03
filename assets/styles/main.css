@@ -8,8 +8,11 @@ body {
 }
 
 #board {
+  background: #002ae0;
+  overflow: hidden;
   display: grid;
   gap: 0;
+  border-radius: 3%;
 }
 
 #buttons {
