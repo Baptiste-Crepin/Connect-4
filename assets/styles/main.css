@@ -7,15 +7,67 @@ body {
   margin: 0;
 }
 
+p {
+  margin: 0;
+}
+
 #board {
   background: #002ae0;
   overflow: hidden;
   display: grid;
   gap: 0;
-  border-radius: 3%;
+  border-radius: 3% 3% 0 0;
+}
+
+#board img {
+  aspect-ratio: 1;
+  padding: 0.5em;
 }
 
 #buttons {
   display: flex;
   justify-content: space-around;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  width: 3em;
+  height: fit-content;
+  padding: 0.3em;
+}
+
+#row1,
+#row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #313131;
+  color: white;
+  font-weight: bold;
+}
+
+#inputs {
+  display: flex;
+  gap: .5em;
+  height: fit-content;
+  align-items: center;
+}
+
+
+#initializer {
+  display: flex;
+  gap: 0.5em;
+}
+
+#initializer button {
+  padding: 0.5em;
+  background-color: #6b6b6b;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+#score {
+  margin: .5em 0;
 }

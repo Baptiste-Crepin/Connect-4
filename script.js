@@ -130,13 +130,13 @@ function displayBoard(board, clickable) {
       //console.log(boardCol, boardRow, board[boardCol][boardRow]);
       switch (board[boardRow][boardCol]) {
         case 0:
-          insertion += "<img src='./assets/blank.jpg'>";
+          insertion += "<img height='60px' src='./assets/blank.png'>";
           break;
         case 1:
-          insertion += "<img src='./assets/yellow.jpg'>";
+          insertion += "<img height='60px' src='./assets/yellow.png'>";
           break;
         case 2:
-          insertion += "<img src='./assets/red.jpg'>";
+          insertion += "<img height='60px' src='./assets/red.png'>";
           break;
       }
     }
@@ -189,11 +189,13 @@ function stopPlay(player) {
   const CELLS = Array.from(document.getElementById("board").children);
   for (let cell of CELLS) cell.onclick = "";
   console.log(player);
-  const htmlInfo = document.getElementById("infos");
-  const paragraph = document.createElement("h2");
-  let node = document.createTextNode("Player " + player + " won");
-  paragraph.appendChild(node);
-  htmlInfo.appendChild(paragraph);
+  const htmlInfo = document.getElementById("row1");
+  const paragraph = document.createElement("p");
+  let node = document.createTextNode("Player " + player + " won the round");
+  //paragraph.appendChild(node);
+  //console.log(paragraph);
+  htmlInfo.insertBefore(node, htmlInfo.lastElementChild);
+  //htmlInfo.appendChild(paragraph);
 }
 
 function initialize() {
