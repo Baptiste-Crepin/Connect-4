@@ -5,6 +5,7 @@ body {
   align-items: center;
   flex-direction: column;
   margin: 0;
+  background-color: #a9a9a9;
 }
 
 p {
@@ -16,17 +17,21 @@ p {
   overflow: hidden;
   display: grid;
   gap: 0;
-  border-radius: 3% 3% 0 0;
+  padding: .3em;
+
 }
 
 #board img {
   aspect-ratio: 1;
-  padding: 0.5em;
+  padding: 0.3em;
+  margin: auto;
 }
 
 #buttons {
   display: flex;
   justify-content: space-around;
+  background: #002ae0;
+  border-radius: 15px 15px 0 0;
 }
 
 input[type=number] {
@@ -45,6 +50,10 @@ input[type=number] {
   background-color: #313131;
   color: white;
   font-weight: bold;
+}
+
+#row2 {
+  border-radius: 0 0 15px 15px;
 }
 
 #inputs {

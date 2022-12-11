@@ -12,14 +12,26 @@ function getWidth() {
   return width;
 }
 
+function isValidDimentions(width, height) {
+  if (height * 2 < width) {
+    alert(
+      "La largeur que vous avez rentré est superieure a 2 fois la hauteur, cette valeur est invalide, nous avons réduit la grille pour vous."
+    );
+  }
+  while (height * 2 < width) {
+    console.log("B");
+    width = height * 2;
+    createBoard(width, height);
+  }
+  return width;
+}
+
 function other_player(player) {
   if (player == 1) return 2;
   return 1;
 }
 
 function createBoard(width, height) {
-  //height*2 > width*2 ? (height = width*2-2, alert("vous avez rentré une hauteur trop grande par rapport a la largeur, celle-ci a été diminuée afin de pouvoir rentrer dans la page")): false;
-
   let board = [];
   for (let boardCol = 0; boardCol < height; boardCol++) {
     let row = [];
@@ -51,7 +63,7 @@ function checkRow(board, row) {
   for (let col = 0; col < board.length; col++) {
     if (board[row][col] === player && board[row][col + 1] === player) {
       playerRow++;
-      console.log(playerRow);
+      //console.log(playerRow);
     } else if (board[row][col] !== player) playerRow = 0;
 
     if (playerRow >= 3) return true;
@@ -123,20 +135,29 @@ function displayBoard(board, clickable) {
   let numCol = "1fr ".repeat(width);
   htmlBoard.style.gridTemplateColumns = numCol;
   let insertion = "";
-
+  let imgWidth = 100 / (board.length / 3);
   for (let boardRow = 0; boardRow < board.length; boardRow++) {
     for (let boardCol = 0; boardCol < board[boardRow].length; boardCol++) {
       //console.log(boardCol);
       //console.log(boardCol, boardRow, board[boardCol][boardRow]);
       switch (board[boardRow][boardCol]) {
         case 0:
-          insertion += "<img height='60px' src='./assets/blank.png'>";
+          insertion +=
+            "<img width='" +
+            imgWidth +
+            "vw' src='./assets/blank.png' draggable='false'>";
           break;
         case 1:
-          insertion += "<img height='60px' src='./assets/yellow.png'>";
+          insertion +=
+            "<img width='" +
+            imgWidth +
+            "vw' src='./assets/yellow.png' draggable='false'>";
           break;
         case 2:
-          insertion += "<img height='60px' src='./assets/red.png'>";
+          insertion +=
+            "<img width='" +
+            imgWidth +
+            "vw' src='./assets/red.png' draggable='false'>";
           break;
       }
     }
@@ -161,9 +182,13 @@ function buttons(board) {
   const htmlButtons = document.getElementById("buttons");
   let numCol = "1fr ".repeat(width);
   htmlButtons.style.gridTemplateColumns = numCol;
+  let imgWidth = 100 / (board.length / 3);
   let insertion = "";
   for (let boardCol = 0; boardCol < board[0].length; boardCol++) {
-    insertion += "<img src='./assets/arrow_downward.svg'>";
+    insertion +=
+      "<img width='" +
+      imgWidth +
+      "vw'src='./assets/arrow_downward.svg' draggable='false'>";
   }
   htmlButtons.innerHTML = insertion;
 
@@ -188,24 +213,45 @@ function stopPlay(player) {
 
   const CELLS = Array.from(document.getElementById("board").children);
   for (let cell of CELLS) cell.onclick = "";
-  console.log(player);
+  //console.log(player);
   const htmlInfo = document.getElementById("row1");
   const paragraph = document.createElement("p");
   let node = document.createTextNode("Player " + player + " won the round");
-  //paragraph.appendChild(node);
-  //console.log(paragraph);
   htmlInfo.insertBefore(node, htmlInfo.lastElementChild);
-  //htmlInfo.appendChild(paragraph);
+
+  //score
+  score[player - 1]++;
+  document.getElementById("row1").lastElementChild.innerHTML =
+    score[0] + " : " + score[1];
 }
 
-function initialize() {
+function resetRow1(score) {
+  //resets the row to delete the player that won while still keeping track of the score
+  document.getElementById("row1").innerHTML =
+    "<div id='player'>player</div><div id='score'>" +
+    score[0] +
+    " : " +
+    score[1] +
+    "</div>";
+}
+
+function getScore() {
+  score = document.getElementById("row1").lastElementChild.innerHTML.split(" ");
+  score = [score[0], score[2]];
+  return score;
+}
+
+function initialize(resetScore) {
   gameOver = false;
   player = 1;
-  width = getWidth();
   height = getHeight();
+  width = isValidDimentions(getWidth(), height);
   board = createBoard(width, height);
   displayBoard(board, true);
   buttons(board);
+
+  resetScore ? (score = [0, 0]) : (score = getScore());
+  resetRow1(score);
 }
 
 function play(board, col) {
@@ -219,5 +265,3 @@ function play(board, col) {
 }
 
 initialize();
-
-//put svg in red  | filter: invert(31%) sepia(82%) saturate(7295%) hue-rotate(354deg) brightness(106%) contrast(128%)
