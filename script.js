@@ -128,6 +128,16 @@ function checkWin(board, row, col) {
   return false;
 }
 
+function clickBoard(board) {
+  const htmlBoard = document.getElementById("board");
+  let cells = Array.from(htmlBoard.children);
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].onclick = function () {
+      play(board, i % width);
+    };
+  }
+}
+
 function displayBoard(board, clickable) {
   const htmlBoard = document.getElementById("board");
   let numCol = "1fr ".repeat(width);
@@ -163,16 +173,6 @@ function displayBoard(board, clickable) {
   htmlBoard.innerHTML = insertion;
 
   if (clickable) clickBoard(board);
-}
-
-function clickBoard(board) {
-  const htmlBoard = document.getElementById("board");
-  let cells = Array.from(htmlBoard.children);
-  for (let i = 0; i < cells.length; i++) {
-    cells[i].onclick = function () {
-      play(board, i % width);
-    };
-  }
 }
 
 function buttons(board) {
@@ -212,10 +212,14 @@ function stopPlay(player) {
   const CELLS = Array.from(document.getElementById("board").children);
   for (let cell of CELLS) cell.onclick = "";
   //console.log(player);
-  const htmlInfo = document.getElementById("row1");
-  const paragraph = document.createElement("p");
-  let node = document.createTextNode("Player " + player + " won the round");
-  htmlInfo.insertBefore(node, htmlInfo.lastElementChild);
+  document.getElementById("row1").innerHTML =
+    "<div id='player'>" +
+    playerColor(player) +
+    " player won the match</div><div id='score'>" +
+    score[0] +
+    " : " +
+    score[1] +
+    "</div>";
 
   //score
   score[player - 1]++;
@@ -223,14 +227,22 @@ function stopPlay(player) {
     score[0] + " : " + score[1];
 }
 
-function resetRow1(score) {
+function UpdateInfos(player, score) {
   //resets the row to delete the player that won while still keeping track of the score
+
   document.getElementById("row1").innerHTML =
-    "<div id='player'>player</div><div id='score'>" +
+    "<div id='player'>" +
+    playerColor(player) +
+    " player</div><div id='score'>" +
     score[0] +
     " : " +
     score[1] +
     "</div>";
+}
+
+function playerColor(player) {
+  if (player == 1) return "red";
+  return "yellow";
 }
 
 function getScore() {
@@ -248,8 +260,9 @@ function initialize(resetScore) {
   displayBoard(board, true);
   buttons(board);
 
-  resetScore ? (score = [0, 0]) : (score = getScore());
-  resetRow1(score);
+  resetScore
+    ? ((score = [0, 0]), UpdateInfos(player, score))
+    : (score = getScore());
 }
 
 function play(board, col) {
@@ -257,6 +270,7 @@ function play(board, col) {
   if (row === false) return;
 
   if (checkWin(board, row, col)) gameOver = true;
+  UpdateInfos(player, score);
   if (gameOver) stopPlay(player);
   else displayBoard(board, true);
   player = other_player(player);
