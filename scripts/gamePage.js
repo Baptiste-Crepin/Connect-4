@@ -97,6 +97,7 @@ function checkDiag(board, row, col, direction) {
       while (col <= board[row].length && row > 0) {
         if (board[row][col] === player && board[row - 1][col + 1] === player)
           playerDiag++;
+        else playerDiag = 0;
         if (playerDiag >= 3) return true;
 
         col++;
@@ -112,6 +113,7 @@ function checkDiag(board, row, col, direction) {
       while (row > 0 && col > 0) {
         if (board[row][col] === player && board[row - 1][col - 1] === player)
           playerDiag++;
+        else playerDiag = 0;
         if (playerDiag >= 3) return true;
 
         col--;
