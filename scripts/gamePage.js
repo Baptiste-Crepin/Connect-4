@@ -30,6 +30,11 @@ function other_player(player) {
   return 1;
 }
 
+function playerColor(player) {
+  if (player == 1) return "red";
+  return "yellow";
+}
+
 function createBoard(width, height) {
   let board = [];
   for (let boardCol = 0; boardCol < height; boardCol++) {
@@ -210,6 +215,37 @@ function buttons(board) {
   }
 }
 
+function displayTime() {
+  time++;
+  document.getElementById("timer").innerText = formatTime(time);
+}
+
+function formatTime(secs) {
+  minutes = secs > 60 ? parseInt(secs / 60) : 0;
+  minutes = minutes > 9 ? minutes : "0" + minutes;
+  let seconds = parseInt(secs % 60);
+  seconds = seconds > 9 ? seconds : "0" + seconds;
+  return `${minutes}:${seconds}`;
+}
+
+function UpdateInfos(player, score) {
+  //resets the row to delete the player that won while still keeping track of the score
+  document.getElementById("row1").innerHTML =
+    "<div id='player'>" +
+    playerColor(player) +
+    " player</div><div id='score'>" +
+    score[0] +
+    " : " +
+    score[1] +
+    "</div>";
+}
+
+function getScore() {
+  score = document.getElementById("row1").lastElementChild.innerHTML.split(" ");
+  score = [score[0], score[2]];
+  return score;
+}
+
 function stopPlay(player) {
   //timer
   displayBoard(board, false);
@@ -243,42 +279,6 @@ function stopPlay(player) {
     " : " +
     score[1] +
     "</div>";
-}
-
-function UpdateInfos(player, score) {
-  //resets the row to delete the player that won while still keeping track of the score
-  document.getElementById("row1").innerHTML =
-    "<div id='player'>" +
-    playerColor(player) +
-    " player</div><div id='score'>" +
-    score[0] +
-    " : " +
-    score[1] +
-    "</div>";
-}
-
-function playerColor(player) {
-  if (player == 1) return "red";
-  return "yellow";
-}
-
-function getScore() {
-  score = document.getElementById("row1").lastElementChild.innerHTML.split(" ");
-  score = [score[0], score[2]];
-  return score;
-}
-
-function displayTime() {
-  time++;
-  document.getElementById("timer").innerText = formatTime(time);
-}
-
-function formatTime(secs) {
-  minutes = secs > 60 ? parseInt(secs / 60) : 0;
-  minutes = minutes > 9 ? minutes : "0" + minutes;
-  let seconds = parseInt(secs % 60);
-  seconds = seconds > 9 ? seconds : "0" + seconds;
-  return `${minutes}:${seconds}`;
 }
 
 function initialize(resetScore) {

@@ -5,48 +5,46 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="author" content="Baptiste Crepin, Gauvain Delhaye">
+  <meta name="author" content="Baptiste Crepin">
   <link href="./assets/styles/rules.css" media="all" rel="stylesheet" type="text/css">
-  <title>Puissance 4</title>
+  <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+  <title>Connect 4</title>
 </head>
 
 <body>
   <div id="header">
     <div id="logo">
       <a href="./index.html"><img src="./assets/logo.png" alt="connect4 logo" width="75px" draggable="false">
-        <h1>Puissance 4</h1>
+        <h1>Connect 4</h1>
       </a>
     </div>
     <nav>
-      <h3><a href="./index.html">Accueil</a></h3>
-      <h3><a href="./game.html">Jeu</a></h3>
-      <h3><a href="./rules.html">Règles</a></h3>
+      <h3><a href="./index.html">Home</a></h3>
+      <h3><a href="./game.html">Game</a></h3>
+      <h3><a href="./rules.html">Rules</a></h3>
       <h3><a href="./scoring.html">Scores</a></h3>
     </nav>
   </div>
 
   <main>
     <p>
-      Le but du jeu est d'aligner une suite de 4 pions de même couleur sur une grille.
+      The goal of this game is to align at least four pieces of the same color on a grid.
     </p>
     <p>
-      Chaque joueur se voit attribuer une couleur de pion (par convention, en général jaune ou rouge).</p>
-    <p> Tour à tour, les deux
-      joueurs
-      placent un pion dans la colonne de leur choix, le pion coulisse alors jusqu'à la position la plus basse possible
-      dans la
-      dite colonne à la suite de quoi c'est à l'adversaire de jouer.</p>
-    <p>Le vainqueur est le joueur qui réalise le
-      premier
-      un
-      alignement (horizontal, vertical ou diagonal) consécutif d'au moins quatre pions de sa couleur, il gagne alors 1
-      point.</p>
-    <p>Si, alors que
-      toutes
-      les
-      cases de la grille de jeu sont remplies, aucun des deux joueurs n'a réalisé un tel alignement, la partie est
-      déclarée
-      nulle et chaque joueur gagne 1 point.</p>
+      Each player is given a color (by convention, the color is either yellow or red).
+    </p>
+    <p>
+      One after the other, both players place a piece in the colums of their choise, the piece drops down until it has
+      no more place left at the bottom in said colum, it is then the turn of the other player to play
+    </p>
+    <p>
+      The winner is the player that first align (horizontally, vertically or diagonally) a serie of at least four
+      consecutive piece of his color, in that case he will win one point.
+    </p>
+    <p>
+      If the grid were to fill up without any of the two players having made an alignement, the game is declared a draw
+      and each player wins one point.
+    </p>
   </main>
 
 </body>

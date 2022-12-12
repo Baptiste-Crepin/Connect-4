@@ -49,74 +49,28 @@ a {
   height: 5.5em;
 }
 
-p {
-  margin: 0;
-}
-
-#board {
-  background: #004384;
-  overflow: hidden;
-  display: grid;
-  gap: 0;
-  padding: 0.3em;
-
-}
-
-#board img {
-  aspect-ratio: 1;
-  padding: 0.3em;
-  margin: auto;
-}
-
-#buttons {
+main {
   display: flex;
-  justify-content: space-around;
-  background-color: #004384;
-  border-radius: 15px 15px 0 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
-  width: 3em;
-  height: fit-content;
-  padding: 0.3em;
-}
-
-#row1,
-#row2 {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  background-color: #313131;
-  color: white;
-  font-weight: bold;
+  padding: 0 3em;
 }
 
-#row2 {
-  border-radius: 0 0 15px 15px;
+main p {
+  font-size: 1.1em;
 }
 
-#inputs {
-  display: flex;
-  gap: .5em;
-  height: fit-content;
-  align-items: center;
+main #container {
+  width: 75%;
+  padding-right: 3em;
+  text-align: center;
 }
 
-#initializer {
-  display: flex;
-  gap: 0.5em;
+main img {
+  width: 100%;
+  object-fit: contain;
+  filter: brightness(85%)
 }
 
-#initializer button {
-  padding: 0.5em;
-  background-color: #6b6b6b;
-  color: white;
-  border: none;
-  font-weight: bold;
-}
-
-#score {
-  margin: .5em 0;
+aside {
+  width: 25%;
 }
