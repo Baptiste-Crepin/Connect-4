@@ -24,8 +24,35 @@
       <h3><a href="./scoring.html">Scores</a></h3>
     </nav>
   </div>
+  <div id="spacing"></div>
 
+  <div id="game">
+    <div id="buttons">
+    </div>
+    <div id="board">
+    </div>
+    <div id="infos">
+      <div id="row1">
+        <div id="player"></div>
+        <div id="score">0 : 0</div>
+      </div>
+      <div id="row2">
+        <div id="inputs">
+          <p>grid</p>
+          <input id="height" type="number" placeholder="Height" value="6">
+          <input id="width" type="number" placeholder="Width" value="7">
+        </div>
+        <div id="timer">timer</div>
+        <div id="initializer">
+          <button id="reset" onclick="initialize(true)">reset</button>
+          <button id="new" onclick="initialize(false)">new</button>
+        </div>
+      </div>
 
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
 </body>
 
 </html>
