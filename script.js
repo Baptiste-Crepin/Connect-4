@@ -19,7 +19,6 @@ function isValidDimentions(width, height) {
     );
   }
   while (height * 2 < width) {
-    console.log("B");
     width = height * 2;
     createBoard(width, height);
   }
@@ -60,10 +59,9 @@ function insertpiece(board, x, player) {
 
 function checkRow(board, row) {
   playerRow = 0;
-  for (let col = 0; col < board.length; col++) {
+  for (let col = 0; col < board[row].length; col++) {
     if (board[row][col] === player && board[row][col + 1] === player) {
       playerRow++;
-      //console.log(playerRow);
     } else if (board[row][col] !== player) playerRow = 0;
 
     if (playerRow >= 3) return true;
@@ -74,9 +72,9 @@ function checkRow(board, row) {
 function checkCol(board, col) {
   playerCol = 0;
   for (let row = 0; row < board.length - 1; row++) {
-    if (board[row][col] === player && board[row + 1][col] === player)
+    if (board[row][col] === player && board[row + 1][col] === player) {
       playerCol++;
-    else if (board[row][col] !== player) playerCol = 0;
+    } else if (board[row][col] !== player) playerCol = 0;
     if (playerCol >= 3) return true;
   }
   return false;
@@ -91,7 +89,7 @@ function checkDiag(board, row, col, direction) {
         row++;
       }
 
-      while (col <= board.length && row > 0) {
+      while (col <= board[row].length && row > 0) {
         if (board[row][col] === player && board[row - 1][col + 1] === player)
           playerDiag++;
         if (playerDiag >= 3) return true;
@@ -101,12 +99,12 @@ function checkDiag(board, row, col, direction) {
       }
 
     case 1:
-      while (col < board.length && row < board.length - 1) {
+      while (col < board[row].length && row < board.length - 1) {
         col++;
         row++;
       }
 
-      while (row > 0 && row > 0) {
+      while (row > 0 && col > 0) {
         if (board[row][col] === player && board[row - 1][col - 1] === player)
           playerDiag++;
         if (playerDiag >= 3) return true;
