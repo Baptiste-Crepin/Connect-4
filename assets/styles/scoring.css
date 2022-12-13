@@ -74,3 +74,26 @@ main h4 {
 #scoring {
   padding-bottom: 5em;
 }
+
+@media screen and (max-width: 850px) {
+  #header {
+    width: 100%;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-direction: column;
+  }
+
+  #logo {
+    width: 100%;
+  }
+
+  #logo a {
+    width: 100%;
+    border-radius: 0;
+    padding-right: 0;
+  }
+
+  #spacing {
+    height: 9em;
+  }
+}

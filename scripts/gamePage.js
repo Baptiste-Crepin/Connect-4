@@ -235,7 +235,7 @@ function UpdateInfos(player, score) {
   document.getElementById("row1").innerHTML =
     "<img src='" +
     playerIcon(player) +
-    "' height='30'><div id='score'>" +
+    "' height='30' draggable='false'><div id='score'>" +
     score[0] +
     " : " +
     score[1] +
@@ -254,7 +254,9 @@ function displayWinner(player, gameOver) {
     HTML_WIN_BANNER.innerHTML = "";
   } else {
     HTML_WIN_BANNER.innerHTML =
-      "<img src='" + playerIcon(player) + "' height='80'>Won the game";
+      "<img src='" +
+      playerIcon(player) +
+      "' height='80' draggable='false'>Won the game";
   }
 }
 
@@ -286,7 +288,7 @@ function stopPlay(player) {
   document.getElementById("row1").innerHTML =
     "<img src='" +
     playerIcon(player) +
-    "' height='30'><div id='score'>" +
+    "' height='30' draggable='false'><div id='score'>" +
     score[0] +
     " : " +
     score[1] +
