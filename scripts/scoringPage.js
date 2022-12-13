@@ -1,7 +1,7 @@
 function displayScore() {
   if (sessionStorage.length == 0) {
     document.getElementById("scoring").innerHTML =
-      "You have not played yet, as such there are no score available";
+      "You have not played yet. No scores are available";
     return;
   }
   let localScore = sessionStorage.getItem("score").split(",");
@@ -65,6 +65,11 @@ function setColor(PARAGRAPH, localScore, i) {
       PARAGRAPH.style.color = YELLOW;
     }
   }
+}
+
+function reset() {
+  sessionStorage.removeItem("score");
+  displayScore();
 }
 
 displayScore();

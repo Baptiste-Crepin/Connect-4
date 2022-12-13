@@ -177,13 +177,13 @@ function displayBoard(board, clickable) {
           insertion +=
             "<img width='" +
             imgWidth +
-            "vw' src='./assets/yellow.png' draggable='false'>";
+            "vw' src='./assets/yellowIcon.png' draggable='false'>";
           break;
         case 2:
           insertion +=
             "<img width='" +
             imgWidth +
-            "vw' src='./assets/red.png' draggable='false'>";
+            "vw' src='./assets/redIcon.png' draggable='false'>";
           break;
       }
     }
@@ -248,8 +248,17 @@ function getScore() {
   return score;
 }
 
-function displayWinner(player, gameOver) {
+function displayWinner(player, gameOver, draw) {
   const HTML_WIN_BANNER = document.getElementById("win");
+  if (draw) {
+    HTML_WIN_BANNER.innerHTML =
+      "<img src='" +
+      playerIcon(player) +
+      "' height='80' draggable='false'>It's a draw<img src='" +
+      playerIcon(otherPlayer(player)) +
+      "' height='80' draggable='false'>";
+    return;
+  }
   if (!gameOver) {
     HTML_WIN_BANNER.innerHTML = "";
   } else {
@@ -260,12 +269,15 @@ function displayWinner(player, gameOver) {
   }
 }
 
-function stopPlay(player) {
+function stopPlay(player, draw) {
   //timer
   displayBoard(board, false);
 
   //score
+  if (draw) score[otherPlayer(player) - 1]++;
   score[player - 1]++;
+
+  //display score
   document.getElementById("row1").lastElementChild.innerHTML =
     score[0] + " : " + score[1];
   if (sessionStorage.length > 0) {
@@ -274,6 +286,7 @@ function stopPlay(player) {
   bestScores.push([score]);
   sessionStorage.setItem("score", bestScores);
 
+  //desactivate the buttons
   const BUTTONS = Array.from(document.getElementById("buttons").children);
   clearInterval(timer);
   for (let button of BUTTONS) {
@@ -294,28 +307,31 @@ function stopPlay(player) {
     score[1] +
     "</div>";
 
-  displayWinner(otherPlayer(player), true);
+  displayWinner(otherPlayer(player), true, draw);
 }
 
 function initialize(resetScore) {
+  //base values
   gameOver = false;
   player = Math.floor(Math.random() * 2) + 1;
   height = getHeight();
   width = isValidDimentions(getWidth(), height);
   board = createBoard(width, height);
-  score = 0;
-  time = -1;
-  clearInterval(timer);
-  displayTime();
-  timer = setInterval(displayTime, 1000);
+
+  //displays
   displayBoard(board, true);
   buttons(board);
   displayWinner(player, false);
 
-  if (resetScore) {
-    score = [0, 0];
-    UpdateInfos(player, score);
-  } else score = getScore();
+  //timer
+  time = -1;
+  clearInterval(timer);
+  displayTime();
+  timer = setInterval(displayTime, 1000);
+
+  if (resetScore) score = [0, 0];
+  else score = getScore();
+  UpdateInfos(otherPlayer(player), score);
 }
 
 function play(board, col) {
@@ -323,12 +339,11 @@ function play(board, col) {
   if (row === false) return;
   if (checkWin(board, row, col)) gameOver = true;
   if (checkDraw(board)) {
-    score[otherPlayer(player) - 1]++;
-    gameOver = true;
+    stopPlay(player, true);
   }
 
   UpdateInfos(player, score);
-  if (gameOver) stopPlay(player);
+  if (gameOver) stopPlay(player, false);
   else displayBoard(board, true);
   player = otherPlayer(player);
 }

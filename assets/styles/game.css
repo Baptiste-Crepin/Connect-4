@@ -5,7 +5,7 @@ body {
   align-items: center;
   flex-direction: column;
   margin: 0;
-  background-color: #a9a9a9;
+  background-color: #EEEEEE;
 }
 
 #header {
@@ -119,6 +119,10 @@ input[type=number] {
 
 #score {
   margin: .5em 0;
+}
+
+#score:nth-child(1) {
+  color: #FF0000;
 }
 
 #win {
