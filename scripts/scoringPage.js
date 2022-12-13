@@ -68,6 +68,11 @@ function setColor(PARAGRAPH, localScore, i) {
 }
 
 function reset() {
+  if (sessionStorage.length == 0) return;
+  if (!confirm("You will lose all your history, do you still want to reset ?"))
+    return;
+  if (!confirm("Are you really sure ? ")) return;
+
   sessionStorage.removeItem("score");
   displayScore();
 }
