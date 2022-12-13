@@ -120,3 +120,23 @@ input[type=number] {
 #score {
   margin: .5em 0;
 }
+
+#win {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 3em;
+  border-radius: 30px;
+  opacity: 95%;
+  background-color: #313131;
+}
+
+#win img {
+  padding: 1rem;
+}
