@@ -139,6 +139,7 @@ input[type=number] {
   border-radius: 30px;
   opacity: 95%;
   background-color: #313131;
+  color: white;
 }
 
 #win img {
