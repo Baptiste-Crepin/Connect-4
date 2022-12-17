@@ -135,7 +135,6 @@ input[type=number] {
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  font-size: 3em;
   border-radius: 30px;
   opacity: 95%;
   background-color: #313131;
@@ -146,9 +145,14 @@ input[type=number] {
   padding: 1rem;
 }
 
-#win p {
+#win h2 {
   color: white;
+  margin: 0;
+  font-size: 3em;
+  font-weight: normal;
 }
+
+
 
 
 @media screen and (max-width: 850px) {

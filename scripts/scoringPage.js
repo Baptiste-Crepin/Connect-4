@@ -49,21 +49,22 @@ function addSeparator(HTMLSCORE, localScore, i) {
 function setColor(PARAGRAPH, localScore, i) {
   const YELLOW = "#ffaf01";
   const RED = "#fe0100";
-  if (
-    (localScore[i] == 0 && localScore[i + 1] == 1) ||
-    (localScore[i] == 1 && localScore[i + 1] == 0)
-  ) {
+  const GREY = "#5F5F5F";
+  if (localScore[i] == 0 || localScore[i + 1] == 0) {
     if (localScore[i] > localScore[i + 1]) {
       PARAGRAPH.style.color = YELLOW;
     } else {
       PARAGRAPH.style.color = RED;
     }
   } else if (localScore.length > 2) {
-    if (localScore[i] == localScore[i - 2]) {
-      PARAGRAPH.style.color = RED;
-    } else {
-      PARAGRAPH.style.color = YELLOW;
-    }
+    if (
+      // in case of a draw
+      localScore[i] > localScore[i - 2] &&
+      localScore[i + 1] > localScore[i - 1]
+    )
+      PARAGRAPH.style.color = GREY;
+    else if (localScore[i] > localScore[i - 2]) PARAGRAPH.style.color = YELLOW;
+    else PARAGRAPH.style.color = RED;
   }
 }
 
