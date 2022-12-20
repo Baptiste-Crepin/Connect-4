@@ -1,22 +1,31 @@
 class Game {
+  height: number;
+  width: number;
+  board: number[][];
+  player: number;
+  score: number[];
+  gameOver: boolean;
+  time: number;
+  timer: number;
   constructor() {
     this.height = this.getHeight();
     this.width = this.getWidth();
-    this.board = this.createBoard(this.width, this.height);
+    this.board = this.createBoard();
     this.player = Math.floor(Math.random() * 2) + 1;
     this.score = this.getScore();
     this.gameOver = false;
 
     this.time = -1;
-    clearInterval(timer);
     this.timer = setInterval(this.displayTime, 1000);
+
   }
 
   resetScore = () => (this.score = [0, 0]);
 
   displayTime = () => {
     this.time++;
-    document.getElementById("timer").innerText = this.formatTime(this.time);
+    const DOM_TIMER = document.getElementById("timer")
+    if (DOM_TIMER) { DOM_TIMER.innerText = this.formatTime(this.time); }
   };
 
   otherPlayer = () => {
@@ -24,35 +33,35 @@ class Game {
     return 1;
   };
 
-  playerIcon = (player) => {
+  playerIcon = (player: number) => {
     if (player == 1) return "./assets/redIcon.png";
     return "./assets/yellowIcon.png";
   };
 
   getScore = () => {
-    score = document
-      .getElementById("row1")
-      .lastElementChild.innerHTML.split(" ");
-    return [score[0], score[2]];
+    const DOM_SCORE = document.getElementById("row1")!.lastElementChild!;
+    let score = DOM_SCORE.innerHTML.split(" ");
+    return [parseInt(score[0]), parseInt(score[2])];
   };
 
-  formatTime = (secs) => {
-    let minutes = secs > 60 ? parseInt(secs / 60) : 0;
-    minutes = minutes > 9 ? minutes : "0" + minutes;
-    let seconds = parseInt(secs % 60);
-    seconds = seconds > 9 ? seconds : "0" + seconds;
+  formatTime = (secs: number) => {
+    let minutes = secs > 60 ? (secs / 60) : 0;
+    minutes = minutes > 9 ? minutes : 0 + minutes;
+    let seconds = (secs % 60);
+    seconds = seconds > 9 ? seconds : 0 + seconds;
     return `${minutes}:${seconds}`;
   };
 
   getHeight = () => {
-    height = parseInt(document.getElementById("height").value);
+
+    let height = parseInt((document.getElementById("height") as HTMLInputElement).value);
     if (height < 4) height = 4;
     if (isNaN(height)) height = 6;
     return (this.height = height);
   };
 
   getWidth = () => {
-    width = parseInt(document.getElementById("width").value);
+    let width = parseInt((document.getElementById("width") as HTMLInputElement).value);
     if (width < 4) width = 4;
     if (isNaN(width)) width = 7;
     if (this.height * 2 < width) {
@@ -60,16 +69,16 @@ class Game {
         "La largeur que vous avez rentré est superieure a 2 fois la hauteur, cette valeur est invalide, nous avons réduit la grille pour vous."
       );
       while (this.height * 2 < width) {
-        width = height * 2;
+        width = this.height * 2;
       }
     }
     return (this.width = width);
   };
 
   createBoard = () => {
-    let board = [];
+    let board: number[][] = [];
     for (let boardCol = 0; boardCol < this.height; boardCol++) {
-      let row = [];
+      let row: number[] = [];
       for (let boardRow = 0; boardRow < this.width; boardRow++) {
         row.push(0);
       }
@@ -79,21 +88,20 @@ class Game {
   };
 
   clickBoard = () => {
-    const htmlBoard = document.getElementById("board");
-    let cells = Array.from(htmlBoard.children);
-    for (let i = 0; i < cells.length; i++) {
-      cells[i].onclick = function () {
-        play(i % width);
-      };
-    }
+    const htmlBoard = document.getElementById("board")!;
+    const CELLS: Element[] = Array.from(htmlBoard.children);
+    CELLS.forEach((cell: Element, index: number) => {
+      cell.setAttribute("onclick", "game.play(" + index % this.width + ")")
+    })
   };
+
 
   buttons = () => {
     //creating the buttons
-    const htmlButtons = document.getElementById("buttons");
-    let numCol = "1fr ".repeat(width);
+    const htmlButtons = document.getElementById("buttons") as HTMLElement;
+    let numCol = "1fr ".repeat(this.width);
     htmlButtons.style.gridTemplateColumns = numCol;
-    let imgWidth = 100 / (board.length / 3);
+    let imgWidth = 100 / (this.board.length / 3);
     let insertion = "";
     for (let boardCol = 0; boardCol < this.board[0].length; boardCol++) {
       insertion +=
@@ -104,32 +112,30 @@ class Game {
     htmlButtons.innerHTML = insertion;
 
     //buttons logic
-    let buttons = Array.from(htmlButtons.children);
-    for (let col = 0; col < buttons.length; col++) {
-      buttons[col].onclick = function () {
-        play(col);
-      };
-    }
-  };
-
-  insertpiece(x) {
-    if (!(x > 0 && x <= this.width)) return false;
-
-    for (let y = 0; y < this.board.length; y++) {
-      if (this.board[y][x - 1] != 0) {
-        if (y == 0) return false;
-        this.board[y - 1][x - 1] = this.player;
-        return y - 1;
-      } else if (y == this.board.length - 1) {
-        this.board[y][x - 1] = this.player;
-        return y;
-      }
-    }
+    const BUTTONS: Element[] = Array.from(htmlButtons.children);
+    BUTTONS.forEach((button: Element, index: number) => {
+      button.setAttribute("onclick", "game.play(" + index + ")")
+    })
   }
 
-  checkRow = (row) => {
+  insertpiece(col: number) {
+    if (!(col > 0 && col <= this.width)) return false;
+
+    for (let row = 0; row < this.board.length; row++) {
+      if (this.board[row][col - 1] != 0) {
+        if (row == 0) return false;
+        this.board[row - 1][col - 1] = this.player;
+        return row - 1;
+      } else if (row == this.board.length - 1) {
+        this.board[row][col - 1] = this.player;
+        return row;
+      }
+    }
+    return false
+  }
+
+  checkRow = (row: number) => {
     let playerRow = 0;
-    //console.log(row);
     for (let col = 0; col < this.board[row].length; col++) {
       if (
         this.board[row][col] === this.player &&
@@ -143,7 +149,7 @@ class Game {
     return false;
   };
 
-  checkCol = (col) => {
+  checkCol = (col: number) => {
     let playerCol = 0;
     for (let row = 0; row < this.board.length - 1; row++) {
       if (
@@ -157,7 +163,7 @@ class Game {
     return false;
   };
 
-  checkDiag = (row, col, direction) => {
+  checkDiag = (row: number, col: number, direction: number) => {
     let playerDiag = 0;
     switch (direction) {
       case 0:
@@ -201,7 +207,7 @@ class Game {
     return false;
   };
 
-  checkWin = (row, col) => {
+  checkWin = (row: number, col: number) => {
     if (
       this.checkRow(row) ||
       this.checkCol(col) ||
@@ -224,7 +230,7 @@ class Game {
     return true;
   };
 
-  stopPlay = (draw) => {
+  stopPlay = (draw: boolean) => {
     //timer
     this.displayBoard(false);
 
@@ -233,30 +239,29 @@ class Game {
     this.score[this.player - 1]++;
 
     //display score
-    document.getElementById("row1").lastElementChild.innerHTML =
+    document.getElementById("row1")!.lastElementChild!.innerHTML =
       this.score[0] + " : " + this.score[1];
-    let bestScores = [];
+    let bestScores = Array();
     if (sessionStorage.length > 0)
-      bestScores = sessionStorage.getItem("score").split(",");
+      bestScores = sessionStorage.getItem("score")!.split(",");
 
     bestScores.push([this.score]);
-    sessionStorage.setItem("score", bestScores);
+    sessionStorage.setItem("score", bestScores.toString());
 
     //desactivate the buttons
-    const BUTTONS = Array.from(document.getElementById("buttons").children);
+    const BUTTONS: Element[] = Array.from(document.getElementById("buttons")!.children);
+    BUTTONS.forEach((button: Element) => {
+      button.removeAttribute("onclick")
+      button.setAttribute("style", "filter: invert(67%) sepia(0%) saturate(477%) brightness(98%) contrast(87%);")
+    })
     clearInterval(this.timer);
-    for (let button of BUTTONS) {
-      button.onclick = "";
-      button.style.filter =
-        "invert(67%) sepia(0%) saturate(477%) hue-rotate(180deg) brightness(98%) contrast(87%)";
-    }
 
-    const CELLS = Array.from(document.getElementById("board").children);
-    for (let cell of CELLS) cell.onclick = "";
-    //console.log(player);
-    document.getElementById("row1").innerHTML =
+    const CELLS: Element[] = Array.from(document.getElementById("board")!.children);
+    CELLS.forEach((cell) => cell.removeAttribute("onclick"))
+
+    document.getElementById("row1")!.innerHTML =
       "<img src='" +
-      this.playerIcon() +
+      this.playerIcon(this.player) +
       "' height='30' draggable='false'><div id='score'>" +
       this.score[0] +
       " : " +
@@ -268,7 +273,7 @@ class Game {
 
   UpdateInfos = () => {
     //resets the row to delete the player that won while still keeping track of the score
-    document.getElementById("row1").innerHTML =
+    document.getElementById("row1")!.innerHTML =
       "<img src='" +
       this.playerIcon(this.player) +
       "' height='30' draggable='false'><div id='score'>" +
@@ -278,14 +283,14 @@ class Game {
       "</div>";
   };
 
-  displayWinner = (draw) => {
-    const HTML_WIN_BANNER = document.getElementById("win");
+  displayWinner = (draw: boolean) => {
+    const HTML_WIN_BANNER = document.getElementById("win")!;
     if (draw) {
       HTML_WIN_BANNER.innerHTML =
         "<img src='" +
-        playerIcon(this.player) +
+        this.playerIcon(this.player) +
         "' height='80' draggable='false'><h2>It's a draw</h2><img src='" +
-        playerIcon(this.otherPlayer()) +
+        this.playerIcon(this.otherPlayer()) +
         "' height='80' draggable='false'>";
       return;
     }
@@ -299,9 +304,9 @@ class Game {
     }
   };
 
-  displayBoard = (clickable) => {
-    const htmlBoard = document.getElementById("board");
-    let numCol = "1fr ".repeat(width);
+  displayBoard = (clickable: boolean) => {
+    const htmlBoard = document.getElementById("board") as HTMLElement;
+    let numCol = "1fr ".repeat(this.width);
     htmlBoard.style.gridTemplateColumns = numCol;
     let insertion = "";
     let imgWidth = 100 / (this.board.length / 3);
@@ -311,8 +316,6 @@ class Game {
         boardCol < this.board[boardRow].length;
         boardCol++
       ) {
-        //console.log(boardCol);
-        //console.log(boardCol, boardRow, board[boardCol][boardRow]);
         switch (this.board[boardRow][boardCol]) {
           case 0:
             insertion +=
@@ -339,33 +342,37 @@ class Game {
 
     if (clickable) this.clickBoard();
   };
+
+
+  play = (col: number) => {
+    let row = this.insertpiece(col + 1);
+    if (row === false) return;
+    if (this.checkWin(row, col)) this.gameOver = true;
+    if (this.checkDraw()) this.stopPlay(true);
+
+    this.UpdateInfos();
+    if (this.gameOver) this.stopPlay(false);
+    else this.displayBoard(true);
+    this.player = this.otherPlayer();
+  }
 }
 
-function initialize(resetScore) {
-  G1 = new Game();
+function initialize(resetScore: boolean = false) {
+  let game: Game = new Game()
 
-  G1.displayTime();
+  game.timer
+  game.displayTime();
 
   //displays
-  G1.displayBoard(true);
-  G1.buttons();
-  G1.displayWinner(false);
+  game.displayBoard(true);
+  game.buttons();
+  game.displayWinner(false);
 
   //scoring
-  if (resetScore) G1.resetScore();
-  G1.UpdateInfos();
+  if (resetScore) game.resetScore();
+  game.UpdateInfos();
+  return game
 }
 
-function play(col) {
-  let row = G1.insertpiece(col + 1);
-  if (row === false) return;
-  if (G1.checkWin(row, col)) G1.gameOver = true;
-  if (G1.checkDraw()) G1.stopPlay(true);
+let game: Game = initialize(false)
 
-  G1.UpdateInfos();
-  if (G1.gameOver) G1.stopPlay(false);
-  else G1.displayBoard(true);
-  G1.player = G1.otherPlayer();
-}
-
-initialize();
