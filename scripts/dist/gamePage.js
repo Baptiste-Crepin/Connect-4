@@ -21,11 +21,11 @@ class Game {
         };
         this.getScore = () => {
             const DOM_SCORE = document.getElementById("row1").lastElementChild;
-            let score = DOM_SCORE.innerHTML.split(" ");
-            return [parseInt(score[0]), parseInt(score[2])];
+            const SCORES = DOM_SCORE.innerHTML.split(" ");
+            return [parseInt(SCORES[0]), parseInt(SCORES[2])];
         };
         this.formatTime = (secs) => {
-            let minutes = secs > 60 ? (secs / 60) : 0;
+            let minutes = secs >= 60 ? Math.floor(secs / 60) : 0;
             minutes = minutes > 9 ? minutes : 0 + minutes;
             let seconds = (secs % 60);
             seconds = seconds > 9 ? seconds : 0 + seconds;
@@ -73,14 +73,14 @@ class Game {
         };
         this.buttons = () => {
             const htmlButtons = document.getElementById("buttons");
-            let numCol = "1fr ".repeat(this.width);
-            htmlButtons.style.gridTemplateColumns = numCol;
-            let imgWidth = 100 / (this.board.length / 3);
+            const COL_NUMBER = "1fr ".repeat(this.width);
+            htmlButtons.style.gridTemplateColumns = COL_NUMBER;
+            const IMG_WIDTH = 100 / (this.board.length / 3);
             let insertion = "";
             for (let boardCol = 0; boardCol < this.board[0].length; boardCol++) {
                 insertion +=
                     "<img width='" +
-                        imgWidth +
+                        IMG_WIDTH +
                         "vw'src='./assets/arrow_downward.svg' draggable='false'>";
             }
             htmlButtons.innerHTML = insertion;
@@ -181,10 +181,10 @@ class Game {
             this.score[this.player - 1]++;
             document.getElementById("row1").lastElementChild.innerHTML =
                 this.score[0] + " : " + this.score[1];
-            let bestScores = Array();
+            let bestScores = [];
             if (sessionStorage.length > 0)
                 bestScores = sessionStorage.getItem("score").split(",");
-            bestScores.push([this.score]);
+            bestScores.push(this.score[0].toString(), this.score[1].toString());
             sessionStorage.setItem("score", bestScores.toString());
             const BUTTONS = Array.from(document.getElementById("buttons").children);
             BUTTONS.forEach((button) => {
@@ -237,29 +237,29 @@ class Game {
         };
         this.displayBoard = (clickable) => {
             const htmlBoard = document.getElementById("board");
-            let numCol = "1fr ".repeat(this.width);
-            htmlBoard.style.gridTemplateColumns = numCol;
+            const COL_NUMBER = "1fr ".repeat(this.width);
+            htmlBoard.style.gridTemplateColumns = COL_NUMBER;
+            const IMG_WIDTH = 100 / (this.board.length / 3);
             let insertion = "";
-            let imgWidth = 100 / (this.board.length / 3);
             for (let boardRow = 0; boardRow < this.board.length; boardRow++) {
                 for (let boardCol = 0; boardCol < this.board[boardRow].length; boardCol++) {
                     switch (this.board[boardRow][boardCol]) {
                         case 0:
                             insertion +=
                                 "<img width='" +
-                                    imgWidth +
+                                    IMG_WIDTH +
                                     "vw' src='./assets/blank.png' draggable='false'>";
                             break;
                         case 1:
                             insertion +=
                                 "<img width='" +
-                                    imgWidth +
+                                    IMG_WIDTH +
                                     "vw' src='./assets/yellowIcon.png' draggable='false'>";
                             break;
                         case 2:
                             insertion +=
                                 "<img width='" +
-                                    imgWidth +
+                                    IMG_WIDTH +
                                     "vw' src='./assets/redIcon.png' draggable='false'>";
                             break;
                     }
@@ -270,10 +270,10 @@ class Game {
                 this.clickBoard();
         };
         this.play = (col) => {
-            let row = this.insertpiece(col + 1);
-            if (row === false)
+            const ROW = this.insertpiece(col + 1);
+            if (ROW === -1)
                 return;
-            if (this.checkWin(row, col))
+            if (this.checkWin(ROW, col))
                 this.gameOver = true;
             if (this.checkDraw())
                 this.stopPlay(true);
@@ -295,11 +295,11 @@ class Game {
     }
     insertpiece(col) {
         if (!(col > 0 && col <= this.width))
-            return false;
+            return -1;
         for (let row = 0; row < this.board.length; row++) {
             if (this.board[row][col - 1] != 0) {
                 if (row == 0)
-                    return false;
+                    return -1;
                 this.board[row - 1][col - 1] = this.player;
                 return row - 1;
             }
@@ -308,20 +308,21 @@ class Game {
                 return row;
             }
         }
-        return false;
+        return -1;
     }
 }
 function initialize(resetScore = false) {
-    let game = new Game();
-    game.timer;
-    game.displayTime();
-    game.displayBoard(true);
-    game.buttons();
-    game.displayWinner(false);
+    const GAME = new Game();
+    clearInterval(GAME.timer - 1);
+    GAME.timer;
+    GAME.displayTime();
+    GAME.displayBoard(true);
+    GAME.buttons();
+    GAME.displayWinner(false);
     if (resetScore)
-        game.resetScore();
-    game.UpdateInfos();
-    return game;
+        GAME.resetScore();
+    GAME.UpdateInfos();
+    return GAME;
 }
 let game = initialize(false);
 //# sourceMappingURL=gamePage.js.map
